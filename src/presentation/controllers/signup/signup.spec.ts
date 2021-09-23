@@ -192,8 +192,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
-    isValidSpy.mockImplementation((email: string): boolean => {
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementation(() => {
       throw new Error()
     })
 
@@ -224,5 +223,28 @@ describe('SignUp Controller', () => {
     // then
     const { name, email, password } = request.body
     expect(executeSpy).toHaveBeenCalledWith({ name, email, password })
+  })
+
+  test('Should return 500 if AddAccount throws', () => {
+    // given
+    const { sut, addAccountStub } = makeSut()
+    const request = {
+      body: {
+        name: 'any name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
+      }
+    }
+    jest.spyOn(addAccountStub, 'execute').mockImplementation(() => {
+      throw new Error()
+    })
+
+    // when
+    const response = sut.handle(request)
+
+    // then
+    expect(response.statusCode).toBe(500)
+    expect(response.body).toStrictEqual(new ServerError())
   })
 })
