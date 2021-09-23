@@ -1,5 +1,5 @@
 import { InvalidParamError, MissingParamError } from '../errors'
-import { badRequest, success, serverError } from '../helpers/http-helper'
+import { success, serverError, unprocessableEntity } from '../helpers/http-helper'
 import { Controller, EmailValidator, HttpResponse, HttpRequest } from '../protocols'
 
 export class SignUpController implements Controller {
@@ -11,19 +11,19 @@ export class SignUpController implements Controller {
 
       for (const field of requiredFields) {
         if (!request.body[field]) {
-          return badRequest(new MissingParamError(field))
+          return unprocessableEntity(new MissingParamError(field))
         }
       }
 
       const { email, password, passwordConfirmation } = request.body
       const passwordConfirmationMatches = password === passwordConfirmation
       if (!passwordConfirmationMatches) {
-        return badRequest(new InvalidParamError('passwordConfirmation'))
+        return unprocessableEntity(new InvalidParamError('passwordConfirmation'))
       }
 
       const isEmailValid = this.emailValidator.isValid(email)
       if (!isEmailValid) {
-        return badRequest(new InvalidParamError('email'))
+        return unprocessableEntity(new InvalidParamError('email'))
       }
 
       return success({})

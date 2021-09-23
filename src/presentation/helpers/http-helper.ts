@@ -11,6 +11,11 @@ export const badRequest = (error: Error): HttpResponse => ({
   body: error
 })
 
+export const unprocessableEntity = (error: Error): HttpResponse => ({
+  statusCode: 422,
+  body: error
+})
+
 export const serverError = (error?: Error): HttpResponse => ({
   statusCode: 500,
   body: error ?? new ServerError()

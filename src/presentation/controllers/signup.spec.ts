@@ -28,7 +28,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if no name is provided', () => {
+  test('Should return 422 if no name is provided', () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -43,11 +43,11 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new MissingParamError('name'))
   })
 
-  test('Should return 400 if no email is provided', () => {
+  test('Should return 422 if no email is provided', () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -62,11 +62,11 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new MissingParamError('email'))
   })
 
-  test('Should return 400 if no password is provided', () => {
+  test('Should return 422 if no password is provided', () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -81,11 +81,11 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new MissingParamError('password'))
   })
 
-  test('Should return 400 if no password confirmation is provided', () => {
+  test('Should return 422 if no password confirmation is provided', () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -100,11 +100,11 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new MissingParamError('passwordConfirmation'))
   })
 
-  test('Should return 400 if password confirmation fails', () => {
+  test('Should return 422 if password confirmation fails', () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -120,11 +120,11 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new InvalidParamError('passwordConfirmation'))
   })
 
-  test('Should return 400 if an invalid email is provided', () => {
+  test('Should return 422 if an invalid email is provided', () => {
     // given
     const { sut, emailValidatorStub } = makeSut()
     const request = {
@@ -141,7 +141,7 @@ describe('SignUp Controller', () => {
     const response = sut.handle(request)
 
     // then
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body).toStrictEqual(new InvalidParamError('email'))
   })
 
