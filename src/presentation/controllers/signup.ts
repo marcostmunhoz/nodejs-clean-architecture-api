@@ -1,9 +1,13 @@
+import { AddAccount } from '../../domain/usecases/add-account'
 import { InvalidParamError, MissingParamError } from '../errors'
 import { success, serverError, unprocessableEntity } from '../helpers/http-helper'
 import { Controller, EmailValidator, HttpResponse, HttpRequest } from '../protocols'
 
 export class SignUpController implements Controller {
-  constructor (private readonly emailValidator: EmailValidator) {}
+  constructor (
+    private readonly emailValidator: EmailValidator,
+    private readonly addAccount: AddAccount
+  ) {}
 
   handle (request: HttpRequest): HttpResponse {
     try {
@@ -25,6 +29,9 @@ export class SignUpController implements Controller {
       if (!isEmailValid) {
         return unprocessableEntity(new InvalidParamError('email'))
       }
+
+      const { name } = request.body
+      this.addAccount.execute({ name, email, password })
 
       return success({})
     } catch (error) {
