@@ -30,9 +30,9 @@ export class SignUpController implements Controller {
       }
 
       const { name } = request.body
-      this.addAccount.execute({ name, email, password })
+      const model = this.addAccount.execute({ name, email, password })
 
-      return success({})
+      return success(model)
     } catch (error) {
       return serverError()
     }
