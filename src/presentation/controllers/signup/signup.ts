@@ -8,7 +8,7 @@ export class SignUpController implements Controller {
     private readonly addAccount: AddAccount
   ) {}
 
-  handle (request: HttpRequest): HttpResponse {
+  async handle (request: HttpRequest): Promise<HttpResponse> {
     try {
       const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
 
@@ -30,7 +30,7 @@ export class SignUpController implements Controller {
       }
 
       const { name } = request.body
-      const model = this.addAccount.execute({ name, email, password })
+      const model = await this.addAccount.execute({ name, email, password })
 
       return success(model)
     } catch (error) {
