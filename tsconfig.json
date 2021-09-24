@@ -9,9 +9,9 @@
     "strict": true,
     "paths": {
       "@/*": ["src/*"],
-      "@domain/*": ["src/domain/*"],
-      "@presentation/*": ["src/presentation/*"],
-      "@utils/*": ["src/utils/*"],
+      "@domain*": ["src/domain*"],
+      "@presentation*": ["src/presentation*"],
+      "@utils*": ["src/utils*"],
     }
   }
 }
