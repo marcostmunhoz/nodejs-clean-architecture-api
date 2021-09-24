@@ -37,5 +37,9 @@
       "eslint 'src/**' --fix",
       "npm run test:staged"
     ]
+  },
+  "dependencies": {
+    "@types/validator": "^13.6.3",
+    "validator": "^13.6.0"
   }
 }
