@@ -192,7 +192,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    jest.spyOn(emailValidatorStub, 'isValid').mockImplementation(() => {
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
     })
 
@@ -236,7 +236,7 @@ describe('SignUp Controller', () => {
         passwordConfirmation: 'any_password'
       }
     }
-    jest.spyOn(addAccountStub, 'execute').mockImplementation(async () => {
+    jest.spyOn(addAccountStub, 'execute').mockImplementationOnce(async () => {
       throw new Error()
     })
 
