@@ -122,4 +122,26 @@ describe('DbAddAccount UseCase', () => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     expect(promise).rejects.toThrow()
   })
+
+  test('Should return an AccountModel on success', async () => {
+    // given
+    const { sut } = makeSut()
+    const addAccountModel = {
+      name: 'valid name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    }
+
+    // when
+    const model = await sut.execute(addAccountModel)
+
+    // then
+    const { name, email } = addAccountModel
+    expect(model).toStrictEqual({
+      id: 'some_id',
+      name,
+      email,
+      password: 'encrypted_password'
+    })
+  })
 })
