@@ -1,8 +1,9 @@
-import { Encrypter } from './db-add-account-protocols'
+import { Encrypter, AddAccountModel, AccountModel, AddAccountRepository } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
 
 interface SutTypes {
   encrypterStub: Encrypter
+  addAccountRepositoryStub: AddAccountRepository
   sut: DbAddAccount
 }
 
@@ -16,12 +17,31 @@ const makeEncrypter = (): Encrypter => {
   return new EncrypterStub()
 }
 
+const makeAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccountRepository {
+    async create (addAccountModel: AddAccountModel): Promise<AccountModel> {
+      const { name, email, password } = addAccountModel
+
+      return {
+        id: 'some_id',
+        name,
+        email,
+        password
+      }
+    }
+  }
+
+  return new AddAccountRepositoryStub()
+}
+
 const makeSut = (): SutTypes => {
-  const encrypter = makeEncrypter()
+  const encrypterStub = makeEncrypter()
+  const addAccountRepositoryStub = makeAddAccountRepository()
 
   return {
-    sut: new DbAddAccount(encrypter),
-    encrypterStub: encrypter
+    sut: new DbAddAccount(encrypterStub, addAccountRepositoryStub),
+    encrypterStub,
+    addAccountRepositoryStub
   }
 }
 
@@ -60,5 +80,27 @@ describe('DbAddAccount UseCase', () => {
     // then
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     expect(promise).rejects.toThrow()
+  })
+
+  test('Should call AddAccountRepository with correct values', async () => {
+    // given
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addAccountModel = {
+      name: 'valid name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    }
+    const createSpy = jest.spyOn(addAccountRepositoryStub, 'create')
+
+    // when
+    await sut.execute(addAccountModel)
+
+    // then
+    const { name, email } = addAccountModel
+    expect(createSpy).toHaveBeenCalledWith({
+      name,
+      email,
+      password: 'encrypted_password'
+    })
   })
 })
