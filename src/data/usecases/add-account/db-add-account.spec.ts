@@ -103,4 +103,23 @@ describe('DbAddAccount UseCase', () => {
       password: 'encrypted_password'
     })
   })
+
+  test('Should throw if AddAccountRepository throws', async () => {
+    // given
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addAccountModel = {
+      name: 'valid name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    }
+    jest.spyOn(addAccountRepositoryStub, 'create')
+      .mockReturnValueOnce(Promise.reject(new Error()))
+
+    // when
+    const promise = sut.execute(addAccountModel)
+
+    // then
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    expect(promise).rejects.toThrow()
+  })
 })
