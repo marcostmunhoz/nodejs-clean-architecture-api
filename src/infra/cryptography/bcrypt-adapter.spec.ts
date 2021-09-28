@@ -2,10 +2,11 @@ import bcrypt from 'bcrypt'
 import { BcryptAdapter } from './bcrypt-adapter'
 
 const BCRYPT_SALT = 12
+const ENCRYPTED_VALUE = 'encrypted_string'
 
 jest.mock('bcrypt', () => ({
   async hash (data: string, saltOrRounds: number): Promise<string> {
-    return 'encrypted_string'
+    return ENCRYPTED_VALUE
   }
 }))
 
@@ -25,5 +26,17 @@ describe('Bcrypt Adapter', () => {
 
     // then
     expect(hashSpy).toHaveBeenCalledWith(value, BCRYPT_SALT)
+  })
+
+  test('Should return encrypted string on success', async () => {
+    // given
+    const sut = makeSut()
+    const value = 'some_string'
+
+    // when
+    const encrypted = await sut.encrypt(value)
+
+    // then
+    expect(encrypted).toEqual(ENCRYPTED_VALUE)
   })
 })
