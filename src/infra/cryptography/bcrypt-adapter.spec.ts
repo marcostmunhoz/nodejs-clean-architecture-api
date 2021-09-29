@@ -39,4 +39,21 @@ describe('Bcrypt Adapter', () => {
     // then
     expect(encrypted).toEqual(ENCRYPTED_VALUE)
   })
+
+  test('Should throws if bcrypt throws', async () => {
+    // given
+    const sut = makeSut()
+    const value = 'some_string'
+    jest.spyOn(bcrypt, 'hash')
+      .mockImplementationOnce(() => {
+        throw new Error()
+      })
+
+    // when
+    const promise = sut.encrypt(value)
+
+    // then
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    expect(promise).rejects.toThrow()
+  })
 })
