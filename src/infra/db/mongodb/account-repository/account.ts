@@ -9,9 +9,7 @@ export class AccountMongoRepository implements AddAccountRepository {
 
     const result = await collection.insertOne(addAccountModel)
     const document = await collection.findOne({ _id: result.insertedId })
-    // @ts-expect-error
-    const { _id, ...documentWithoutId } = document
 
-    return Object.assign({}, documentWithoutId, { id: _id }) as AccountModel
+    return MongoHelper.mapToEntity<AccountModel>(document)
   }
 }
