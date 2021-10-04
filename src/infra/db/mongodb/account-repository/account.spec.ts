@@ -1,6 +1,10 @@
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
 
+const makeSut = (): AccountMongoRepository => {
+  return new AccountMongoRepository()
+}
+
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
     // @ts-expect-error
@@ -13,7 +17,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account on success', async () => {
     // given
-    const sut = new AccountMongoRepository()
+    const sut = makeSut()
     const data = {
       name: 'any_name',
       email: 'any_email@mail.com',
