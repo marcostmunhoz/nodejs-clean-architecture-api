@@ -1,5 +1,5 @@
-import express from 'express'
+// istanbul ignore file
 
-const app = express()
+import app from './config/app'
 
 app.listen(5050, () => console.log('Server running at http://localhost:5050'))
