@@ -1,6 +1,6 @@
 import { AddAccount, Controller, EmailValidator, HttpRequest, HttpResponse } from './signup-protocols'
 import { InvalidParamError, MissingParamError } from '@/presentation/errors'
-import { success, serverError, unprocessableEntity } from '@/presentation/helpers/http-helper'
+import { serverError, unprocessableEntity, created } from '@/presentation/helpers/http-helper'
 
 export class SignUpController implements Controller {
   constructor (
@@ -32,7 +32,7 @@ export class SignUpController implements Controller {
       const { name } = request.body
       const model = await this.addAccount.execute({ name, email, password })
 
-      return success(model)
+      return created(model)
     } catch (error) {
       return serverError()
     }

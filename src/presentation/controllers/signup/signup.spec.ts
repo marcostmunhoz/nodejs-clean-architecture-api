@@ -248,7 +248,7 @@ describe('SignUp Controller', () => {
     expect(response.body).toStrictEqual(new ServerError())
   })
 
-  test('Should return 200 if valid data is provided', async () => {
+  test('Should return 201 if valid data is provided', async () => {
     // given
     const { sut } = makeSut()
     const request = {
@@ -265,7 +265,7 @@ describe('SignUp Controller', () => {
 
     // then
     const { name, email, password } = request.body
-    expect(response.statusCode).toBe(200)
+    expect(response.statusCode).toBe(201)
     expect(response.body).toStrictEqual({
       id: 'some_id',
       name,
