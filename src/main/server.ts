@@ -1,5 +1,12 @@
 // istanbul ignore file
 
-import app from './config/app'
+import env from '@/main/config/env'
+import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
-app.listen(5050, () => console.log('Server running at http://localhost:5050'))
+void (async () => {
+  await MongoHelper.connect(env.mongoUrl)
+
+  const app = (await import('./config/app')).default
+
+  app.listen(env.port, () => console.log(`Server running at http://localhost:${env.port}`))
+})()
