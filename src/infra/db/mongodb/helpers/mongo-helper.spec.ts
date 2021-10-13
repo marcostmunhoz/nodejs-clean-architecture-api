@@ -8,6 +8,8 @@ describe('Mongo Helper', () => {
 
   afterAll(async () => await sut.disconnect())
 
+  afterEach(() => jest.clearAllMocks())
+
   test('Should reconnect if trying to get collection after disconnecting', async () => {
     // given
     const connectSpy = jest.spyOn(MongoHelperSingleton, 'connect')
@@ -18,5 +20,16 @@ describe('Mongo Helper', () => {
 
     // then
     expect(connectSpy).toHaveBeenCalled()
+  })
+
+  test('Should not reconnect if trying to get collection while connected', async () => {
+    // given
+    const connectSpy = jest.spyOn(MongoHelperSingleton, 'connect')
+
+    // when
+    await MongoHelperSingleton.getCollection('some_collection')
+
+    // then
+    expect(connectSpy).not.toHaveBeenCalled()
   })
 })
