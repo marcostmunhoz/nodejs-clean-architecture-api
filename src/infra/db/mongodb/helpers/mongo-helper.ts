@@ -24,6 +24,7 @@ export default class MongoHelper {
   }
 
   async disconnect (): Promise<void> {
+    // istanbul ignore next line
     await this.client?.close()
 
     this.client = null

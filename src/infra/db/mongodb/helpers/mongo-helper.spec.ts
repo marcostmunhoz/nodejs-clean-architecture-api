@@ -3,6 +3,11 @@ import MongoHelper, { MongoHelperSingleton, MongoHelperSingleton as sut } from '
 // @ts-expect-error
 MongoHelper.setUrl(global.__MONGO_URI__ as string)
 
+interface SampleEntity {
+  id: string
+  someProp: any
+}
+
 describe('Mongo Helper', () => {
   beforeAll(async () => await sut.connect())
 
@@ -42,5 +47,20 @@ describe('Mongo Helper', () => {
 
     // then
     expect(disconnectSpy).toHaveBeenCalled()
+  })
+
+  test('Should map document to given type via mapToEntity', async () => {
+    // given
+    const document = {
+      _id: 'some_random_id',
+      someProp: 'some_value'
+    }
+
+    // when
+    const mapped = MongoHelper.mapToEntity<SampleEntity>(document)
+
+    // then
+    expect(mapped.id).toEqual(document._id)
+    expect(mapped.someProp).toEqual(document.someProp)
   })
 })
