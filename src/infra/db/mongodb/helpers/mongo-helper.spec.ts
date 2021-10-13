@@ -32,4 +32,15 @@ describe('Mongo Helper', () => {
     // then
     expect(connectSpy).not.toHaveBeenCalled()
   })
+
+  test('Should disconnect if connecting with forceReconnect = true', async () => {
+    // given
+    const disconnectSpy = jest.spyOn(MongoHelperSingleton, 'disconnect')
+
+    // when
+    await MongoHelperSingleton.connect(true)
+
+    // then
+    expect(disconnectSpy).toHaveBeenCalled()
+  })
 })
