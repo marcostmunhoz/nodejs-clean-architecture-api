@@ -1,5 +1,8 @@
-import { MongoHelper } from '../helpers/mongo-helper'
+import MongoHelper, { MongoHelperSingleton } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
+
+// @ts-expect-error
+MongoHelper.setUrl(global.__MONGO_URI__ as string)
 
 const makeSut = (): AccountMongoRepository => {
   return new AccountMongoRepository()
@@ -7,16 +10,15 @@ const makeSut = (): AccountMongoRepository => {
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
-    // @ts-expect-error
-    await MongoHelper.connect(global.__MONGO_URI__ as string)
+    await MongoHelperSingleton.connect()
   })
 
   afterAll(async () => {
-    await MongoHelper.disconnect()
+    await MongoHelperSingleton.disconnect()
   })
 
   beforeEach(async () => {
-    const collection = MongoHelper.getCollection('accounts')
+    const collection = await MongoHelperSingleton.getCollection('accounts')
     await collection.deleteMany({})
   })
 

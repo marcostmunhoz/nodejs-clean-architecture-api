@@ -1,19 +1,21 @@
-import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
+import MongoHelper, { MongoHelperSingleton } from '@/infra/db/mongodb/helpers/mongo-helper'
 import request from 'supertest'
 import app from '../config/app'
 
+// @ts-expect-error
+MongoHelper.setUrl(global.__MONGO_URI__ as string)
+
 describe('SignUp Routes', () => {
   beforeAll(async () => {
-    // @ts-expect-error
-    await MongoHelper.connect(global.__MONGO_URI__ as string)
+    await MongoHelperSingleton.connect()
   })
 
   afterAll(async () => {
-    await MongoHelper.disconnect()
+    await MongoHelperSingleton.disconnect()
   })
 
   beforeEach(async () => {
-    const collection = MongoHelper.getCollection('accounts')
+    const collection = await MongoHelperSingleton.getCollection('accounts')
     await collection.deleteMany({})
   })
 
